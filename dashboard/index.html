@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Talent Nation | Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<base target="_top">
+<meta charset="utf-8">
+<style>
+  :root { --purple:#8e6fbf; --deep:#6b4fa0; --plum:#3b2a5a; --bg:#f6f2fb; --card:#fff; --line:#ded3ee; --text:#2a1f3d; --muted:#6f6385;
+          --amber:#e9a23b; --ok:#2e9b6a; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#17111f; --card:#221a30; --line:#3a2d52; --text:#f1ebfa; --muted:#aa9cc4; --plum:#e3d6fa; }
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,Arial,sans-serif; font-size:15px; }
+  .wrap { max-width:1150px; margin:0 auto; padding:16px; }
+  header { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:14px; }
+  header .logo { width:120px; }
+  header h1 { font-size:20px; margin:0; color:var(--plum); flex:1; }
+  .btn { border:1px solid var(--line); background:var(--card); color:var(--text); border-radius:9px; padding:8px 12px; font:inherit; cursor:pointer; }
+  .btn.pri { background:var(--deep); color:#fff; border-color:var(--deep); font-weight:600; }
+  .btn:disabled { opacity:.6; cursor:default; }
+  input, select, textarea { width:100%; padding:9px 10px; font:inherit; color:var(--text); background:var(--card);
+    border:1px solid var(--line); border-radius:9px; }
+  label { display:block; font-weight:600; font-size:13px; margin:10px 0 4px; }
+  .grid { display:grid; grid-template-columns:minmax(0,1.15fr) minmax(0,1fr); gap:16px; align-items:start; }
+  @media (max-width:860px) { .grid { grid-template-columns:1fr; } }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:14px; }
+  .cal-head { display:flex; align-items:center; gap:8px; margin-bottom:10px; }
+  .cal-head h2 { flex:1; margin:0; font-size:17px; text-align:center; }
+  .dow, .days { display:grid; grid-template-columns:repeat(7,1fr); gap:4px; }
+  .dow div { text-align:center; font-size:12px; color:var(--muted); padding:4px 0; }
+  .day { min-height:68px; border:1px solid var(--line); border-radius:8px; padding:4px; cursor:pointer; background:var(--bg); overflow:hidden; }
+  .day.out { opacity:.4; }
+  .day.today { outline:2px solid var(--purple); }
+  .day.sel { background:color-mix(in srgb, var(--purple) 18%, var(--card)); }
+  .day .n { font-size:12px; color:var(--muted); }
+  .chip { display:block; font-size:11px; padding:1px 5px; border-radius:6px; margin-top:2px; color:#fff;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .chip.req { background:var(--amber); }
+  .chip.conf { background:var(--deep); }
+  .chip.board { background:#4a90d9; }
+  .chip.pend { background:#e0675a; }
+  .badge.OnBoard { background:#4a90d9; }
+  .badge.Pending { background:#e0675a; }
+  .partner { border:1px solid var(--line); background:var(--card); border-radius:10px; padding:10px 12px; margin:8px 0; font-size:13px; }
+  .partner b { color:var(--plum); }
+  textarea.copy { width:100%; min-height:150px; }
+  .legend { display:flex; gap:14px; font-size:12px; color:var(--muted); margin-top:10px; }
+  .legend i { display:inline-block; width:10px; height:10px; border-radius:3px; margin-right:5px; }
+  .tabs { display:flex; gap:6px; margin-bottom:10px; flex-wrap:wrap; }
+  .tab { padding:6px 12px; border-radius:99px; border:1px solid var(--line); cursor:pointer; background:var(--card); font-size:13px; }
+  .tab.on { background:var(--deep); color:#fff; border-color:var(--deep); }
+  .req-card { border:1px solid var(--line); border-radius:12px; padding:12px; margin-bottom:10px; background:var(--bg); }
+  .req-top { display:flex; justify-content:space-between; gap:8px; align-items:flex-start; }
+  .req-top b { font-size:16px; }
+  .badge { font-size:11px; padding:2px 8px; border-radius:99px; color:#fff; background:var(--amber); white-space:nowrap; }
+  .badge.Confirmed { background:var(--ok); } .badge.Declined, .badge.Cancelled { background:#8a8a8a; }
+  .meta { color:var(--muted); font-size:13px; margin:4px 0 8px; }
+  .checks label { display:flex; gap:8px; align-items:center; font-weight:400; font-size:14px; margin:4px 0; cursor:pointer; }
+  .checks input { width:auto; }
+  .actions { display:flex; gap:8px; margin-top:10px; flex-wrap:wrap; }
+  .empty { color:var(--muted); text-align:center; padding:20px 0; }
+  .login { max-width:340px; margin:70px auto; text-align:center; }
+  .login .logo { width:180px; }
+  .err { color:#c0392b; font-size:14px; min-height:20px; margin-top:8px; }
+  .modal-bg { position:fixed; inset:0; background:rgba(20,10,35,.55); display:none; align-items:center; justify-content:center; padding:16px; z-index:9; }
+  .modal { background:var(--card); border-radius:14px; padding:18px; width:100%; max-width:460px; max-height:92vh; overflow:auto; }
+  .modal h3 { margin:0 0 4px; color:var(--plum); }
+  .row2 { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .toast { position:fixed; bottom:18px; left:50%; transform:translateX(-50%); background:var(--plum); color:var(--bg);
+    padding:10px 16px; border-radius:10px; display:none; z-index:10; }
+  .hide { display:none !important; }
+</style>
+</head>
+<body>
+<div id="login" class="login card">
+  <div class="logo"><img src="../logo.webp" alt="Talent Nation" style="width:100%;height:auto;display:block"></div>
+  <h2 style="color:var(--plum)">Battle Dashboard</h2>
+  <input id="pin" type="password" inputmode="numeric" placeholder="Enter your PIN" autocomplete="off">
+  <div class="err" id="lerr"></div>
+  <button class="btn pri" id="lbtn" style="width:100%;margin-top:6px">Unlock</button>
+</div>
+
+<div id="app" class="wrap hide">
+  <header>
+    <div class="logo"><img src="../logo.webp" alt="Talent Nation" style="width:100%;height:auto;display:block"></div>
+    <h1>Battle Dashboard <span id="who" style="font-weight:400;color:var(--muted);font-size:14px"></span></h1>
+    <button class="btn pri" id="sheetlink">Open Google Sheet</button>
+    <button class="btn" id="boardlink">Copy board link</button>
+    <button class="btn" id="refresh">Refresh</button>
+    <button class="btn" id="logout">Lock</button>
+  </header>
+
+  <div class="grid">
+    <section class="card">
+      <div class="cal-head">
+        <button class="btn" id="prev">&lsaquo;</button>
+        <h2 id="mtitle"></h2>
+        <button class="btn" id="next">&rsaquo;</button>
+        <button class="btn" id="todaybtn">Today</button>
+      </div>
+      <div class="dow"><div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div></div>
+      <div class="days" id="days"></div>
+      <div class="legend"><span><i style="background:var(--amber)"></i>New request</span>
+        <span><i style="background:#4a90d9"></i>On board</span>
+        <span><i style="background:#e0675a"></i>Needs approval</span>
+        <span><i style="background:var(--deep)"></i>Confirmed</span><span>Times in EST</span></div>
+    </section>
+
+    <section class="card">
+      <div class="tabs" id="tabs"></div>
+      <div id="list"></div>
+    </section>
+  </div>
+</div>
+
+<div class="modal-bg" id="mbg">
+  <div class="modal">
+    <h3 id="mtitle2">Confirm battle</h3>
+    <div class="meta" id="msub"></div>
+    <div class="row2">
+      <div><label>Date</label><input type="date" id="c_date"></div>
+      <div><label>Time (EST)</label><input type="time" id="c_time"></div>
+    </div>
+    <label>Opponent username</label><input id="c_opp" maxlength="60">
+    <div class="row2">
+      <div><label>Opponent diamond estimate</label><select id="c_diamond"></select></div>
+      <div><label>Opponent agency</label><input id="c_agency" list="agencies" maxlength="60" placeholder="Type to add new"></div>
+    </div>
+    <datalist id="agencies"></datalist>
+    <div id="c_d2wrap" class="hide"><label>Opponent creator 2 diamond estimate</label><select id="c_diamond2"></select></div>
+    <label>Notes <small style="font-weight:400">(saved as "CONFIRMED - …")</small></label>
+    <input id="c_notes" maxlength="300">
+    <div class="err" id="cerr"></div>
+    <div class="actions">
+      <button class="btn pri" id="c_save">Confirm &amp; add to sheet</button>
+      <button class="btn" id="c_cancel">Cancel</button>
+    </div>
+  </div>
+</div>
+<div class="modal-bg" id="dbg">
+  <div class="modal">
+    <h3>Send the Discord confirmation</h3>
+    <div class="meta" id="dsub"></div>
+    <textarea class="copy" id="dtext" readonly></textarea>
+    <div class="actions">
+      <button class="btn pri" id="dcopy">Copy message</button>
+      <button class="btn" id="dclose">Done</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+var API = 'https://script.google.com/macros/s/AKfycbysJCwJg4qKWrTiL5HMG1gG4w9LRCx0xlrwXkEVJwlZpC9KqsL8-YIedVtpgKkCf-hqvA/exec';
+function api(name, params, data) {
+  var q = new URLSearchParams({ api: name });
+  Object.keys(params || {}).forEach(function (k) { q.set(k, params[k]); });
+  if (data) q.set('data', JSON.stringify(data));
+  return fetch(API + '?' + q.toString(), { redirect: 'follow' })
+    .then(function (r) { return r.json(); })
+    .then(function (j) { if (!j.ok) throw new Error(j.error || 'Something went wrong'); return j.result; });
+}
+// Lets the dashboard code keep calling google.script.run.x(...) while talking to the API
+var google = { script: { run: (function () {
+  var routes = {
+    login: function (pin) { return api('login', { pin: pin }); },
+    getDashboard: function (pin) { return api('dashboard', { pin: pin }); },
+    setCheck: function (pin, id, key, value) { return api('check', { pin: pin, id: id }, { key: key, value: value }); },
+    setStatus: function (pin, id, status) { return api('status', { pin: pin, id: id }, { status: status }); },
+    postToBoard: function (pin, id) { return api('post', { pin: pin, id: id }); },
+    removeFromBoard: function (pin, id) { return api('remove', { pin: pin, id: id }); },
+    declinePartner: function (pin, id) { return api('decline', { pin: pin, id: id }); },
+    confirmBattle: function (pin, id, d) { return api('confirm', { pin: pin, id: id }, d); }
+  };
+  function make(ok, fail) {
+    var r = {
+      withSuccessHandler: function (f) { return make(f, fail); },
+      withFailureHandler: function (f) { return make(ok, f); }
+    };
+    Object.keys(routes).forEach(function (m) {
+      r[m] = function () {
+        routes[m].apply(null, arguments)
+          .then(function (v) { if (ok) ok(v); })
+          .catch(function (e) { if (fail) fail(e); else console.error(e); });
+      };
+    });
+    return r;
+  }
+  return make(null, null);
+})() } };
+var PIN = '', DATA = null, view = new Date(), selected = null, tab = 'open', confirmingId = null;
+var $ = function (id) { return document.getElementById(id); };
+var MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+var CHECKS = ['Opponent Found', 'Opponent Agreed', 'Time Confirmed', 'Creator Notified', 'Added to Sheet'];
+
+function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+function ymd(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+function niceDate(s) { var p = s.split('-'); return new Date(+p[0], +p[1] - 1, +p[2]).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' }); }
+function to24(t) {
+  var m = /^(\d{1,2}):(\d{2})\s*(AM|PM)$/i.exec(t || ''); if (!m) return '';
+  var h = +m[1] % 12; if (m[3].toUpperCase() === 'PM') h += 12;
+  return String(h).padStart(2, '0') + ':' + m[2];
+}
+function toast(msg) { var t = $('toast'); t.textContent = msg; t.style.display = 'block'; setTimeout(function () { t.style.display = 'none'; }, 2600); }
+function errMsg(x) { return (x && x.message || 'Something went wrong').replace(/^Error:\s*/, ''); }
+
+// ---- login
+function unlock(pin) {
+  $('lbtn').disabled = true; $('lerr').textContent = '';
+  google.script.run.withSuccessHandler(function (u) {
+    PIN = pin; try { sessionStorage.setItem('tn_pin', pin); } catch (e) {}
+    $('who').textContent = '· ' + u.name;
+    $('login').classList.add('hide'); $('app').classList.remove('hide');
+    load();
+  }).withFailureHandler(function (x) {
+    $('lbtn').disabled = false; $('lerr').textContent = errMsg(x);
+    try { sessionStorage.removeItem('tn_pin'); } catch (e) {}
+  }).login(pin);
+}
+$('lbtn').onclick = function () { unlock($('pin').value); };
+$('pin').addEventListener('keydown', function (e) { if (e.key === 'Enter') unlock($('pin').value); });
+$('logout').onclick = function () { try { sessionStorage.removeItem('tn_pin'); } catch (e) {} location.reload(); };
+$('refresh').onclick = load;
+try { var saved = sessionStorage.getItem('tn_pin'); if (saved) unlock(saved); } catch (e) {}
+
+// ---- data
+function load() {
+  google.script.run.withSuccessHandler(function (d) { DATA = d; render(); })
+    .withFailureHandler(function (x) { toast(errMsg(x)); }).getDashboard(PIN);
+}
+function render() { renderCal(); renderList(); }
+$('sheetlink').onclick = function () {
+  if (DATA && DATA.sheetUrl) window.open(DATA.sheetUrl, '_blank');
+  else toast('Still loading - try again in a second');
+};
+
+var ACTIVE = ['Requested', 'In Progress', 'On Board', 'Pending'];
+function openReqs() { return DATA.requests.filter(function (r) { return ACTIVE.indexOf(r.status) >= 0; }); }
+function count(status) { return DATA.requests.filter(function (r) { return r.status === status || (status === 'Requested' && r.status === 'In Progress'); }).length; }
+function statusClass(s) { return String(s).replace(/ /g, ''); }
+$('boardlink').onclick = function () {
+  if (!DATA || !DATA.boardUrl) { toast('Still loading - try again in a second'); return; }
+  var ta = document.createElement('textarea'); ta.value = DATA.boardUrl; document.body.appendChild(ta); ta.select();
+  var ok = false; try { ok = document.execCommand('copy'); } catch (e) {} document.body.removeChild(ta);
+  toast(ok ? 'Board link copied - send it to partner agencies' : DATA.boardUrl);
+};
+
+// ---- calendar
+function renderCal() {
+  $('mtitle').textContent = MONTHS[view.getMonth()] + ' ' + view.getFullYear();
+  var first = new Date(view.getFullYear(), view.getMonth(), 1);
+  var start = new Date(first); start.setDate(1 - first.getDay());
+  var byDay = {};
+  function add(k, cls, label) { (byDay[k] = byDay[k] || []).push({ cls: cls, label: label }); }
+  openReqs().forEach(function (r) {
+    add(r.date, r.status === 'Pending' ? 'pend' : r.status === 'On Board' ? 'board' : 'req', r.time + ' ' + r.username);
+  });
+  DATA.battles.forEach(function (b) { add(b.date, 'conf', b.time + ' ' + b.username + ' vs ' + b.opponent); });
+  var box = $('days'); box.textContent = '';
+  var todayKey = ymd(new Date());
+  for (var i = 0; i < 42; i++) {
+    var d = new Date(start); d.setDate(start.getDate() + i);
+    var k = ymd(d);
+    var cell = el('div', 'day' + (d.getMonth() !== view.getMonth() ? ' out' : '') + (k === todayKey ? ' today' : '') + (k === selected ? ' sel' : ''));
+    cell.appendChild(el('div', 'n', d.getDate()));
+    (byDay[k] || []).slice(0, 3).forEach(function (c) { cell.appendChild(el('span', 'chip ' + c.cls, c.label)); });
+    if ((byDay[k] || []).length > 3) cell.appendChild(el('span', 'n', '+' + (byDay[k].length - 3) + ' more'));
+    cell.onclick = (function (key) { return function () { selected = selected === key ? null : key; render(); }; })(k);
+    box.appendChild(cell);
+  }
+}
+$('prev').onclick = function () { view = new Date(view.getFullYear(), view.getMonth() - 1, 1); renderCal(); };
+$('next').onclick = function () { view = new Date(view.getFullYear(), view.getMonth() + 1, 1); renderCal(); };
+$('todaybtn').onclick = function () { view = new Date(); selected = ymd(new Date()); render(); };
+
+// ---- request list + checklist
+function renderList() {
+  var tabs = [['open', 'New (' + count('Requested') + ')'], ['board', 'On board (' + count('On Board') + ')'],
+    ['approve', 'Needs approval (' + count('Pending') + ')'], ['confirmed', 'Confirmed (' + DATA.battles.length + ')'],
+    ['closed', 'Declined / cancelled']];
+  var tb = $('tabs'); tb.textContent = '';
+  tabs.forEach(function (t) {
+    var b = el('div', 'tab' + (tab === t[0] ? ' on' : ''), t[1]);
+    b.onclick = function () { tab = t[0]; renderList(); };
+    tb.appendChild(b);
+  });
+  if (selected) {
+    var clr = el('div', 'tab', 'Showing ' + niceDate(selected) + ' ✕'); clr.onclick = function () { selected = null; render(); }; tb.appendChild(clr);
+  }
+  var list = $('list'); list.textContent = '';
+  var items;
+  if (tab === 'confirmed') {
+    items = DATA.battles.filter(function (b) { return !selected || b.date === selected; });
+    items.sort(function (a, b) { return a.date < b.date ? 1 : -1; });
+    items.forEach(function (b) {
+      var c = el('div', 'req-card'), top = el('div', 'req-top');
+      top.appendChild(el('b', '', b.username + ' vs ' + b.opponent));
+      top.appendChild(el('span', 'badge Confirmed', 'Confirmed'));
+      c.appendChild(top);
+      c.appendChild(el('div', 'meta', niceDate(b.date) + ' · ' + b.time + ' EST · ' + b.vs + ' · ' + b.type + ' · ' + b.powerups));
+      c.appendChild(el('div', 'meta', 'Opponent: ' + b.opponent + ' (' + b.oppAgency + ', ' + b.oppDiamond + ')'));
+      list.appendChild(c);
+    });
+  } else {
+    items = DATA.requests.filter(function (r) {
+      if (tab === 'open' && r.status !== 'Requested' && r.status !== 'In Progress') return false;
+      if (tab === 'board' && r.status !== 'On Board') return false;
+      if (tab === 'approve' && r.status !== 'Pending') return false;
+      if (tab === 'closed' && (r.status !== 'Declined' && r.status !== 'Cancelled')) return false;
+      return !selected || r.date === selected;
+    });
+    items.sort(function (a, b) { return (a.date + a.time) < (b.date + b.time) ? -1 : 1; });
+    items.forEach(function (r) { list.appendChild(reqCard(r)); });
+  }
+  if (!items.length) list.appendChild(el('div', 'empty', 'Nothing here yet.'));
+}
+
+function reqCard(r) {
+  var c = el('div', 'req-card'), top = el('div', 'req-top');
+  top.appendChild(el('b', '', r.username + (r.creator2 ? ' & ' + r.creator2 : '')));
+  top.appendChild(el('span', 'badge ' + statusClass(r.status), r.status === 'Pending' ? 'Needs approval' : r.status));
+  c.appendChild(top);
+  c.appendChild(el('div', 'meta', niceDate(r.date) + ' · ' + r.time + ' EST · ' + r.vs + ' · ' + r.type + ' · ' + r.powerups + ' · ' + r.diamond + (r.diamond2 ? ' + ' + r.diamond2 : '') +
+    ' · 18+ ' + (r.adult === 'Yes' ? 'ON' : 'OFF')));
+  if (r.partner) {
+    var pb = el('div', 'partner');
+    var pl = function (k, v) { if (!v) return; var d = el('div'); var b = el('b', '', k + ': '); d.appendChild(b); d.appendChild(document.createTextNode(v)); pb.appendChild(d); };
+    pl('Partner creator', r.partner.creator + (r.partner.creator2 ? ' & ' + r.partner.creator2 : ''));
+    pl('Agency', r.partner.agency); pl('Their diamonds', r.partner.diamonds + (r.partner.diamonds2 ? ' + ' + r.partner.diamonds2 : ''));
+    pl('Suggested time', r.partner.suggested ? r.partner.suggested + ' ET (instead of ' + r.time + ')' : '');
+    pl('Their notes', r.partner.notes);
+    pl('Confirm via', r.partner.via + ' - ' + r.partner.contact);
+    pl('Submitted', r.partner.submitted);
+    c.appendChild(pb);
+  }
+  if (r.discord) c.appendChild(el('div', 'meta', 'Discord: ' + r.discord));
+  if (r.backup) c.appendChild(el('div', 'meta', 'Backup: ' + r.backup));
+  if (r.notes) c.appendChild(el('div', 'meta', 'Notes: ' + r.notes));
+  var open = ACTIVE.indexOf(r.status) >= 0;
+  var checks = el('div', 'checks');
+  CHECKS.forEach(function (k) {
+    var l = el('label'), cb = document.createElement('input');
+    cb.type = 'checkbox'; cb.checked = !!r.checks[k]; cb.disabled = !open || k === 'Added to Sheet';
+    cb.onchange = function () {
+      r.checks[k] = cb.checked;
+      google.script.run.withFailureHandler(function (x) { cb.checked = !cb.checked; toast(errMsg(x)); })
+        .setCheck(PIN, r.id, k, cb.checked);
+    };
+    l.appendChild(cb); l.appendChild(document.createTextNode(k)); checks.appendChild(l);
+  });
+  c.appendChild(checks);
+  if (open) {
+    var a = el('div', 'actions');
+    if (r.status === 'Pending') {
+      var ap = el('button', 'btn pri', 'Approve & confirm'); ap.onclick = function () { openConfirm(r); };
+      var dp = el('button', 'btn', 'Decline partner'); dp.onclick = function () { declinePartner(r, dp); };
+      a.appendChild(ap); a.appendChild(dp);
+    } else {
+      if (r.status === 'On Board') {
+        var rb = el('button', 'btn', 'Remove from board'); rb.onclick = function () { removeFromBoard(r, rb); }; a.appendChild(rb);
+      } else {
+        var pb2 = el('button', 'btn pri', 'Post to board'); pb2.onclick = function () { postToBoard(r, pb2); }; a.appendChild(pb2);
+      }
+      var ok = el('button', 'btn', 'Confirm battle'); ok.onclick = function () { openConfirm(r); };
+      var no = el('button', 'btn', 'Decline'); no.onclick = function () { setStatus(r, 'Declined'); };
+      var cx = el('button', 'btn', 'Cancel'); cx.onclick = function () { setStatus(r, 'Cancelled'); };
+      a.appendChild(ok); a.appendChild(no); a.appendChild(cx);
+    }
+    c.appendChild(a);
+  } else if (r.status === 'Declined' || r.status === 'Cancelled') {
+    var a2 = el('div', 'actions'), re = el('button', 'btn', 'Reopen'); re.onclick = function () { setStatus(r, 'Requested'); };
+    a2.appendChild(re); c.appendChild(a2);
+  }
+  return c;
+}
+function busy(btn, text) { btn.disabled = true; btn.dataset.t = btn.textContent; btn.textContent = text; }
+function idle(btn) { btn.disabled = false; btn.textContent = btn.dataset.t || btn.textContent; }
+function postToBoard(r, btn) {
+  busy(btn, 'Posting…');
+  google.script.run.withSuccessHandler(function (res) {
+    toast(res && res.avatar ? 'Posted to the board' : 'Posted to the board (TikTok photo unavailable, showing initials)'); load();
+  }).withFailureHandler(function (x) { idle(btn); toast(errMsg(x)); }).postToBoard(PIN, r.id);
+}
+function removeFromBoard(r, btn) {
+  busy(btn, 'Removing…');
+  google.script.run.withSuccessHandler(function () { toast('Removed from the board'); load(); })
+    .withFailureHandler(function (x) { idle(btn); toast(errMsg(x)); }).removeFromBoard(PIN, r.id);
+}
+function declinePartner(r, btn) {
+  if (!confirm('Decline this partner request and reopen the slot on the board?')) return;
+  busy(btn, 'Declining…');
+  google.script.run.withSuccessHandler(function (res) {
+    toast(res && res.emailed ? 'Declined - they were emailed. Slot is open again.' : 'Declined - slot is open again.'); load();
+  }).withFailureHandler(function (x) { idle(btn); toast(errMsg(x)); }).declinePartner(PIN, r.id);
+}
+function setStatus(r, s) {
+  google.script.run.withSuccessHandler(function () { r.status = s; render(); })
+    .withFailureHandler(function (x) { toast(errMsg(x)); }).setStatus(PIN, r.id, s);
+}
+
+// ---- confirm modal
+function openConfirm(r) {
+  confirmingId = r.id;
+  $('msub').textContent = r.username + ' · ' + r.vs + ' · ' + r.type + ' · ' + r.powerups + ' · ' + r.diamond;
+  var p = r.partner;
+  $('c_date').value = r.date; $('c_time').value = to24(p && p.suggested ? p.suggested : r.time);
+  $('c_opp').value = p ? p.creator + (p.creator2 ? ' & ' + p.creator2 : '') : '';
+  $('c_agency').value = p ? p.agency : ''; $('c_notes').value = p && p.notes ? p.notes : ''; $('cerr').textContent = '';
+  $('mtitle2').textContent = p ? 'Approve battle' : 'Confirm battle';
+  $('c_save').textContent = p ? 'Approve & send confirmation' : 'Confirm & add to sheet';
+  var sel = $('c_diamond'); sel.textContent = '';
+  DATA.options.diamond.forEach(function (o) { var op = el('option', '', o); sel.appendChild(op); });
+  if (p && p.diamonds) sel.value = p.diamonds;
+  var is2 = r.vs === '2v2', sel2 = $('c_diamond2'); sel2.textContent = '';
+  DATA.options.diamond.forEach(function (o) { sel2.appendChild(el('option', '', o)); });
+  if (p && p.diamonds2) sel2.value = p.diamonds2;
+  $('c_d2wrap').className = is2 ? '' : 'hide';
+  var dl = $('agencies'); dl.textContent = '';
+  DATA.agencies.forEach(function (a) { var op = document.createElement('option'); op.value = a; dl.appendChild(op); });
+  $('mbg').style.display = 'flex';
+}
+$('c_cancel').onclick = function () { $('mbg').style.display = 'none'; };
+$('dclose').onclick = function () { $('dbg').style.display = 'none'; };
+$('dcopy').onclick = function () {
+  var t = $('dtext'); t.select(); var ok = false; try { ok = document.execCommand('copy'); } catch (e) {}
+  toast(ok ? 'Copied - paste it into your Discord DM' : 'Select the text and copy it');
+};
+$('c_save').onclick = function () {
+  var btn = $('c_save'); btn.disabled = true; $('cerr').textContent = '';
+  google.script.run.withSuccessHandler(function (res) {
+    btn.disabled = false; $('mbg').style.display = 'none';
+    if (res && res.discordMessage) {
+      $('dsub').textContent = 'Send this to ' + (res.discordContact || 'the partner') + ' on Discord' +
+        (res.emailed === false ? ' (the email could not be sent)' : '') + ':';
+      $('dtext').value = res.discordMessage; $('dbg').style.display = 'flex';
+    }
+    toast(res && res.emailed ? 'Battle added to the sheet and confirmation emailed' : 'Battle added to the sheet'); load();
+  }).withFailureHandler(function (x) { btn.disabled = false; $('cerr').textContent = errMsg(x); })
+  .confirmBattle(PIN, confirmingId, {
+    date: $('c_date').value, time: $('c_time').value, opponent: $('c_opp').value,
+    oppDiamond: $('c_diamond').value, oppDiamond2: $('c_d2wrap').className === 'hide' ? '' : $('c_diamond2').value, oppAgency: $('c_agency').value, notes: $('c_notes').value
+  });
+};
+</script>
+</body>
+</html>
