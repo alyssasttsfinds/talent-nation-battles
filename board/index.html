@@ -211,7 +211,14 @@ function slotCard(s) {
   var dm = document.createElement('select');
   dm.appendChild(el('option', '', 'Your diamonds…')).value = '';
   DATA.options.diamond.forEach(function (o) { dm.appendChild(el('option', '', o)); });
-  field('Creator diamonds', dm);
+  field(s.vs === '2v2' ? 'Creator 1 diamonds' : 'Creator diamonds', dm);
+  var dm2 = null;
+  if (s.vs === '2v2') {
+    dm2 = document.createElement('select');
+    var dm2first = el('option', '', 'Creator 2 diamonds…'); dm2first.value = ''; dm2.appendChild(dm2first);
+    DATA.options.diamond.forEach(function (o) { dm2.appendChild(el('option', '', o)); });
+    field('Creator 2 diamonds', dm2);
+  }
 
   var sh = document.createElement('select');
   DATA.shifts.forEach(function (m) { var o = el('option', '', shiftText(m, s.time)); o.value = m; sh.appendChild(o); });
@@ -238,9 +245,10 @@ function slotCard(s) {
 
   go.onclick = function () {
     err.textContent = '';
+    if (dm2 && !dm2.value) { err.textContent = 'Please choose a diamond estimate for your second creator.'; return; }
     var agency = ag.value === '__other' ? agOther.value : ag.value;
     go.disabled = true; go.textContent = 'Sending…';
-    api('accept', { k: KEY, id: s.id }, { creator: c1.value, creator2: c2.value, agency: agency, diamond: dm.value,
+    api('accept', { k: KEY, id: s.id }, { creator: c1.value, creator2: c2.value, agency: agency, diamond: dm.value, diamond2: dm2 ? dm2.value : '',
       shift: sh.value, notes: notes.value, via: via.value, contact: contact.value }).then(function () {
       form.replaceWith(el('div', 'sent', 'Request sent! We\'ll review it and confirm by ' + via.value.toLowerCase() + ' soon.'));
       toast('Request sent - thank you!'); setTimeout(load, 1500);
