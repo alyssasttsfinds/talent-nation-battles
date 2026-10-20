@@ -115,7 +115,7 @@ function api(name, params, data) {
 
   f.vs.addEventListener('change', function () {
     document.getElementById('c2wrap').style.display = f.vs.value === '2v2' ? 'block' : 'none';
-    f.creator2.required = f.vs.value === '2v2';
+    f.creator2.required = f.diamond2.required = f.vs.value === '2v2';
   });
 
   f.addEventListener('submit', function (e) {
@@ -124,7 +124,7 @@ function api(name, params, data) {
     err.textContent = '';
     go.disabled = true; go.textContent = 'Sending…';
     var d = {};
-    ['username','discord','date','time','backup','type','vs','powerups','diamond','notes','creator2','adult'].forEach(function (k) { d[k] = f[k].value; });
+    ['username','discord','date','time','backup','type','vs','powerups','diamond','notes','creator2','diamond2','adult'].forEach(function (k) { d[k] = f[k].value; });
     api('submit', {}, d).then(function () {
         f.style.display = 'none';
         document.getElementById('done').style.display = 'block';
