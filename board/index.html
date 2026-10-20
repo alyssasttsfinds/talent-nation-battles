@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Talent Nation | Open Battles</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<base target="_top">
+<meta charset="utf-8">
+<style>
+  :root { --purple:#8e6fbf; --deep:#6b4fa0; --plum:#3b2a5a; --bg:#f6f2fb; --card:#fff; --line:#ded3ee; --text:#2a1f3d; --muted:#6f6385;
+          --gold:#e9a23b; --ok:#2e9b6a; --blurple:#5865f2; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#17111f; --card:#221a30; --line:#3a2d52; --text:#f1ebfa; --muted:#aa9cc4; --plum:#e3d6fa; }
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,Arial,sans-serif; font-size:14px; }
+  .banner { background:linear-gradient(120deg,#2a1d45 0%,#4a3375 55%,#6b4fa0 100%); color:#fff; border-bottom:3px solid var(--gold); }
+  .banner .in { max-width:1180px; margin:0 auto; padding:22px 16px; display:flex; gap:18px; align-items:center; flex-wrap:wrap; }
+  .banner .logo { width:150px; background:#fff; border-radius:12px; padding:4px; }
+  .banner small { letter-spacing:.18em; color:#f1c777; font-weight:700; font-size:11px; }
+  .banner h1 { margin:2px 0 6px; font-size:30px; }
+  .banner p { margin:0; max-width:560px; color:#e6dcf7; }
+  .wrap { max-width:1180px; margin:0 auto; padding:16px; }
+  .bar { display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-bottom:10px; }
+  .tabs { display:flex; background:var(--card); border:1px solid var(--line); border-radius:99px; padding:3px; }
+  .tab { padding:7px 14px; border-radius:99px; cursor:pointer; font-weight:600; }
+  .tab.on { background:var(--plum); color:#fff; }
+  @media (prefers-color-scheme: dark) { .tab.on { color:#17111f; } }
+  .tab b { display:inline-block; min-width:22px; padding:0 6px; margin-left:6px; border-radius:99px; background:var(--gold); color:#2a1d45; font-size:12px; text-align:center; }
+  .spacer { flex:1; }
+  .btn { border:1px solid var(--line); background:var(--card); color:var(--text); border-radius:9px; padding:9px 14px; font:inherit; font-weight:600; cursor:pointer; }
+  .btn.disc { background:var(--blurple); border-color:var(--blurple); color:#fff; }
+  .btn.acc { background:linear-gradient(#f0b94f,#dca03a); border-color:#c98f2c; color:#2a1d45; }
+  .btn.small { padding:6px 10px; font-size:12px; }
+  .note { color:var(--muted); font-size:12.5px; margin:6px 0 14px; line-height:1.45; }
+  .slot { background:var(--card); border:1px solid var(--line); border-left:4px solid var(--gold); border-radius:12px; padding:12px 14px; margin-bottom:12px; }
+  .slot.pending { border-left-color:var(--muted); opacity:.9; }
+  .slot.confirmed { border-left-color:var(--ok); }
+  .info { display:flex; flex-wrap:wrap; gap:14px 22px; align-items:center; }
+  .cell .k { font-size:10.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); margin-bottom:3px; font-weight:700; }
+  .cell .v { font-weight:600; }
+  .when { min-width:130px; }
+  .creator { display:flex; flex-direction:column; gap:6px; }
+  .cr { display:flex; align-items:center; gap:8px; color:inherit; text-decoration:none; font-weight:700; }
+  .cr:hover span { text-decoration:underline; }
+  .av { width:38px; height:38px; border-radius:50%; border:2px solid var(--gold); object-fit:cover; background:var(--purple); color:#fff;
+        display:inline-flex; align-items:center; justify-content:center; font-weight:700; flex:none; overflow:hidden; }
+  .badge { display:inline-block; padding:3px 9px; border-radius:99px; font-size:12px; font-weight:700; }
+  .b-type { background:#2a1d45; color:#f6d98b; }
+  .b-pu { background:#dff3e8; color:#1d6b46; }
+  .b-npu { background:#fbe1de; color:#9b2d22; }
+  .b-18 { background:#eee9f6; color:#4a3d63; }
+  .b-pend { background:var(--gold); color:#2a1d45; }
+  .b-conf { background:var(--ok); color:#fff; }
+  .form { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:8px; margin-top:12px; padding-top:12px; border-top:1px dashed var(--line); align-items:end; }
+  .form label { display:block; font-size:10.5px; letter-spacing:.05em; text-transform:uppercase; color:var(--muted); font-weight:700; margin-bottom:3px; }
+  input, select { width:100%; padding:8px 9px; font:inherit; color:var(--text); background:var(--card); border:1px solid var(--line); border-radius:8px; }
+  .wide { grid-column:span 2; }
+  @media (max-width:520px) { .wide { grid-column:span 1; } }
+  .acts { display:flex; gap:6px; align-items:center; flex-wrap:wrap; }
+  .err { color:#c0392b; font-size:13px; grid-column:1 / -1; min-height:0; }
+  .sent { background:#e8f6ee; color:#1d6b46; border-radius:8px; padding:10px 12px; margin-top:12px; font-weight:600; }
+  .empty { text-align:center; color:var(--muted); padding:40px 0; }
+  .toast { position:fixed; bottom:18px; left:50%; transform:translateX(-50%); background:var(--plum); color:var(--bg); padding:10px 16px; border-radius:10px; display:none; z-index:10; max-width:90%; text-align:center; }
+  .hide { display:none !important; }
+  .mbg { position:fixed; inset:0; background:rgba(20,10,35,.6); display:none; align-items:center; justify-content:center; padding:16px; z-index:20; }
+  .modal { background:var(--card); border-radius:16px; padding:20px; width:100%; max-width:440px; max-height:94vh; overflow:auto; position:relative; }
+  .modal h3 { margin:0 0 4px; color:var(--plum); font-size:18px; padding-right:34px; }
+  .modal p.sub { margin:0 0 12px; color:var(--muted); font-size:13px; }
+  .modal label { display:block; font-size:12px; font-weight:700; margin:10px 0 4px; }
+  .modal textarea { width:100%; min-height:90px; padding:9px; font:inherit; color:var(--text); background:var(--card); border:1px solid var(--line); border-radius:8px; resize:vertical; }
+  .modal .x { position:absolute; top:12px; right:12px; width:32px; height:32px; border-radius:50%; border:1px solid var(--line); background:var(--card); color:var(--text); cursor:pointer; font-size:16px; }
+  .modal .send { width:100%; margin-top:14px; padding:12px; }
+</style>
+</head>
+<body>
+<div class="banner"><div class="in">
+  <div class="logo"><img src="../logo.webp" alt="Talent Nation" style="width:100%;height:auto;display:block"></div>
+  <div>
+    <small>TALENT NATION</small>
+    <h1>Open Battles</h1>
+    <p>Pick a battle, add your creator and agency, and press Accept. We review every request and confirm by email or Discord.</p>
+  </div>
+</div></div>
+
+<div class="wrap">
+  <div class="bar">
+    <div class="tabs" id="tabs"></div>
+    <div class="spacer"></div>
+    <button class="btn disc" id="discTop">&#128172; Message us on Discord</button>
+    <button class="btn" id="refresh">&#8635; Refresh</button>
+  </div>
+  <div class="note">All times are Eastern Time (ET). Estimated scores are about 1.5&ndash;2&times; the diamonds without power-ups, or 2.5&ndash;3&times; with power-ups. Tap a creator to open their TikTok.</div>
+  <div id="list"><div class="empty">Loading…</div></div>
+</div>
+<div class="mbg" id="mbg">
+  <div class="modal">
+    <button class="x" id="mclose" aria-label="Close">&#10005;</button>
+    <h3>&#128172; Message Talent Nation on Discord</h3>
+    <p class="sub">Goes straight to our team on Discord. We'll reply to your Discord username.</p>
+    <label>Your agency</label>
+    <select id="m_agency"></select>
+    <input id="m_agency_other" class="hide" placeholder="Your agency name" maxlength="60" style="margin-top:6px">
+    <label>Your Discord username <small style="font-weight:400;color:var(--muted)">(not your display name)</small></label>
+    <input id="m_discord" placeholder="username" maxlength="60">
+    <label>About a battle <small style="font-weight:400;color:var(--muted)">(optional)</small></label>
+    <select id="m_about"></select>
+    <label>Message</label>
+    <textarea id="m_msg" maxlength="1000"></textarea>
+    <div class="err" id="m_err" style="grid-column:auto"></div>
+    <button class="btn acc send" id="m_send">Send message</button>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+var API = 'https://script.google.com/macros/s/AKfycbysJCwJg4qKWrTiL5HMG1gG4w9LRCx0xlrwXkEVJwlZpC9KqsL8-YIedVtpgKkCf-hqvA/exec';
+function api(name, params, data) {
+  var q = new URLSearchParams({ api: name });
+  Object.keys(params || {}).forEach(function (k) { q.set(k, params[k]); });
+  if (data) q.set('data', JSON.stringify(data));
+  return fetch(API + '?' + q.toString(), { redirect: 'follow' })
+    .then(function (r) { return r.json(); })
+    .then(function (j) { if (!j.ok) throw new Error(j.error || 'Something went wrong'); return j.result; });
+}
+var KEY = new URLSearchParams(location.search).get('k') || '';
+var DATA = null, tab = 'available';
+var $ = function (id) { return document.getElementById(id); };
+var DAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'], MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+function niceDate(s) { var p = s.split('-'); var d = new Date(+p[0], +p[1] - 1, +p[2]); return DAYS[d.getDay()] + ', ' + MON[d.getMonth()] + ' ' + d.getDate(); }
+function toast(m) { var t = $('toast'); t.textContent = m; t.style.display = 'block'; setTimeout(function () { t.style.display = 'none'; }, 3200); }
+function errMsg(x) { return (x && x.message || 'Something went wrong').replace(/^Error:\s*/, ''); }
+
+function mins(t) {
+  var m = /^(\d{1,2}):(\d{2})\s*(AM|PM)$/i.exec(t || ''); if (!m) return 0;
+  return ((+m[1] % 12) + (m[3].toUpperCase() === 'PM' ? 12 : 0)) * 60 + +m[2];
+}
+function label(total) {
+  total = ((total % 1440) + 1440) % 1440;
+  var h = Math.floor(total / 60), m = total % 60, ap = h >= 12 ? 'PM' : 'AM';
+  return (h % 12 || 12) + ':' + (m < 10 ? '0' : '') + m + ' ' + ap;
+}
+function shiftText(s, time) {
+  if (!s) return 'No change (' + time + ')';
+  var a = Math.abs(s), txt = a >= 60 ? (a / 60) + (a === 60 ? ' hour' : ' hours') : a + ' min';
+  return txt + (s < 0 ? ' earlier' : ' later') + ' (' + label(mins(time) + s) + ')';
+}
+
+function copyText(text) {
+  try { var ta = document.createElement('textarea'); ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); return true; } catch (e) { return false; }
+}
+
+function creatorLink(name, avatar) {
+  var a = el('a', 'cr'); a.href = 'https://www.tiktok.com/@' + encodeURIComponent(name); a.target = '_blank'; a.rel = 'noopener';
+  if (avatar) {
+    var img = el('img', 'av'); img.src = avatar; img.alt = '';
+    img.onerror = function () { var f = el('span', 'av', name.charAt(0).toUpperCase()); img.replaceWith(f); };
+    a.appendChild(img);
+  } else { a.appendChild(el('span', 'av', name.charAt(0).toUpperCase())); }
+  a.appendChild(el('span', '', '@' + name));
+  return a;
+}
+function cell(k, node, extra) {
+  var c = el('div', 'cell' + (extra ? ' ' + extra : '')); c.appendChild(el('div', 'k', k));
+  var v = el('div', 'v'); if (typeof node === 'string') v.textContent = node; else v.appendChild(node); c.appendChild(v); return c;
+}
+function badge(text, cls) { return el('span', 'badge ' + cls, text); }
+
+function infoRow(s) {
+  var info = el('div', 'info');
+  info.appendChild(cell('Date', niceDate(s.date), 'when'));
+  info.appendChild(cell('Time', s.time + ' ET'));
+  var cr = el('div', 'creator'); cr.appendChild(creatorLink(s.creator, s.avatar));
+  if (s.creator2) cr.appendChild(creatorLink(s.creator2, s.avatar2));
+  info.appendChild(cell('Creator', cr));
+  var ty = el('div'); ty.appendChild(badge(s.vs, 'b-type')); ty.appendChild(el('div', '', s.type)); ty.lastChild.style.cssText = 'font-size:11px;color:var(--muted);margin-top:2px';
+  info.appendChild(cell('Battle type', ty));
+  info.appendChild(cell('Est. diamonds', '◆ ' + s.diamond));
+  info.appendChild(cell('Est. score', s.score ? '★ ' + s.score : '-'));
+  info.appendChild(cell('Power-ups', badge(s.powerups === 'PU' ? 'Power-ups' : 'No power-ups', s.powerups === 'PU' ? 'b-pu' : 'b-npu')));
+  info.appendChild(cell('18+', badge(s.adult ? 'ON' : 'OFF', 'b-18')));
+  return info;
+}
+
+function discordMessage(s) {
+  return 'About a battle: ' + niceDate(s.date) + ' at ' + s.time + ' ET - @' + s.creator + (s.creator2 ? ' & @' + s.creator2 : '') +
+    ' (' + s.vs + ', ' + s.type + ', ' + (s.powerups === 'PU' ? 'power-ups' : 'no power-ups') + ', ' + s.diamond + ' est.' + (s.adult ? ', 18+ live' : '') + '). ' +
+    'I have a question / I\'m interested: ';
+}
+
+function slotCard(s) {
+  var card = el('div', 'slot'); card.appendChild(infoRow(s));
+  var form = el('div', 'form');
+  function field(labelText, input, cls) { var w = el('div', cls || ''); w.appendChild(el('label', '', labelText)); w.appendChild(input); form.appendChild(w); return w; }
+  function inp(ph, max) { var i = document.createElement('input'); i.placeholder = ph || ''; if (max) i.maxLength = max; return i; }
+
+  var c1 = inp('@username', 40), c2 = inp('@username 2', 40);
+  field(s.vs === '2v2' ? 'Your creator 1' : 'Your creator', c1);
+  if (s.vs === '2v2') field('Your creator 2', c2);
+
+  var ag = document.createElement('select');
+  ag.appendChild(el('option', '', 'Select agency…')).value = '';
+  DATA.agencies.forEach(function (a) { var o = el('option', '', a); o.value = a; ag.appendChild(o); });
+  var oo = el('option', '', 'Other (type below)'); oo.value = '__other'; ag.appendChild(oo);
+  var agOther = inp('Your agency name', 60); agOther.style.marginTop = '4px'; agOther.className = 'hide';
+  ag.onchange = function () { agOther.className = ag.value === '__other' ? '' : 'hide'; };
+  var agw = field('Your agency', ag); agw.appendChild(agOther);
+
+  var dm = document.createElement('select');
+  dm.appendChild(el('option', '', 'Your diamonds…')).value = '';
+  DATA.options.diamond.forEach(function (o) { dm.appendChild(el('option', '', o)); });
+  field('Creator diamonds', dm);
+
+  var sh = document.createElement('select');
+  DATA.shifts.forEach(function (m) { var o = el('option', '', shiftText(m, s.time)); o.value = m; sh.appendChild(o); });
+  field('Suggested time change', sh);
+
+  var notes = inp('e.g. no power-ups instead', 300);
+  field('Notes / other changes', notes, 'wide');
+
+  var via = document.createElement('select');
+  ['Email', 'Discord'].forEach(function (o) { via.appendChild(el('option', '', o)); });
+  field('Confirm me by', via);
+  var contact = inp('you@email.com', 100);
+  field('Your email / Discord', contact);
+  via.onchange = function () { contact.placeholder = via.value === 'Email' ? 'you@email.com' : 'Discord username'; };
+
+  var acts = el('div', 'acts');
+  var go = el('button', 'btn acc', 'Accept'); acts.appendChild(go);
+  var dc = el('button', 'btn disc small', '\u{1F4AC} Discord'); dc.title = 'Ask us about this battle';
+  dc.onclick = function () { openMsg(s); };
+  acts.appendChild(dc);
+  var aw = el('div'); aw.appendChild(el('label', '', ' ')); aw.appendChild(acts); form.appendChild(aw);
+
+  var err = el('div', 'err'); form.appendChild(err);
+
+  go.onclick = function () {
+    err.textContent = '';
+    var agency = ag.value === '__other' ? agOther.value : ag.value;
+    go.disabled = true; go.textContent = 'Sending…';
+    api('accept', { k: KEY, id: s.id }, { creator: c1.value, creator2: c2.value, agency: agency, diamond: dm.value,
+      shift: sh.value, notes: notes.value, via: via.value, contact: contact.value }).then(function () {
+      form.replaceWith(el('div', 'sent', 'Request sent! We\'ll review it and confirm by ' + via.value.toLowerCase() + ' soon.'));
+      toast('Request sent - thank you!'); setTimeout(load, 1500);
+    }).catch(function (x) {
+      go.disabled = false; go.textContent = 'Accept'; err.textContent = errMsg(x);
+    });
+  };
+  card.appendChild(form);
+  return card;
+}
+
+function acceptedCard(s) {
+  var card = el('div', 'slot ' + (s.status === 'Confirmed' ? 'confirmed' : 'pending')); card.appendChild(infoRow(s));
+  var info = card.firstChild;
+  var vs = el('div', 'creator'); vs.appendChild(creatorLink(s.partner.creator, ''));
+  if (s.partner.creator2) vs.appendChild(creatorLink(s.partner.creator2, ''));
+  info.appendChild(cell('Opponent', vs));
+  info.appendChild(cell('Agency', s.partner.agency || '-'));
+  info.appendChild(cell('Status', badge(s.status === 'Confirmed' ? 'Confirmed' : 'Pending', s.status === 'Confirmed' ? 'b-conf' : 'b-pend')));
+  return card;
+}
+
+function render() {
+  var tb = $('tabs'); tb.textContent = '';
+  [['available', 'Available', DATA.available.length], ['accepted', 'Accepted', DATA.accepted.length]].forEach(function (t) {
+    var d = el('div', 'tab' + (tab === t[0] ? ' on' : ''), t[1]); d.appendChild(el('b', '', t[2]));
+    d.onclick = function () { tab = t[0]; render(); }; tb.appendChild(d);
+  });
+  var list = $('list'); list.textContent = '';
+  var items = tab === 'available' ? DATA.available : DATA.accepted;
+  items.forEach(function (s) { list.appendChild(tab === 'available' ? slotCard(s) : acceptedCard(s)); });
+  if (!items.length) list.appendChild(el('div', 'empty', tab === 'available' ? 'No open battles right now - check back soon!' : 'Nothing accepted yet.'));
+}
+
+function load() {
+  api('board', { k: KEY }).then(function (d) { DATA = d; render(); }).catch(function (x) { $('list').textContent = ''; $('list').appendChild(el('div', 'empty', errMsg(x))); });
+}
+// ---- "Message us on Discord" form (posts to our team's Discord)
+function battleLabel(s) { return niceDate(s.date) + ' · ' + s.time + ' ET · @' + s.creator + (s.creator2 ? ' & @' + s.creator2 : ''); }
+function openMsg(slot) {
+  if (!DATA) { toast('Still loading - try again in a second'); return; }
+  var ag = $('m_agency'); ag.textContent = '';
+  var first = el('option', '', 'Select agency…'); first.value = ''; ag.appendChild(first);
+  DATA.agencies.forEach(function (a) { var o = el('option', '', a); o.value = a; ag.appendChild(o); });
+  var other = el('option', '', 'Other — add my agency'); other.value = '__other'; ag.appendChild(other);
+  $('m_agency_other').className = 'hide'; $('m_agency_other').value = '';
+  var ab = $('m_about'); ab.textContent = '';
+  var none = el('option', '', 'Not about one battle'); none.value = ''; ab.appendChild(none);
+  DATA.available.forEach(function (s) { var o = el('option', '', battleLabel(s)); o.value = battleLabel(s); ab.appendChild(o); });
+  ab.value = slot ? battleLabel(slot) : '';
+  $('m_msg').value = ''; $('m_err').textContent = '';
+  $('m_send').disabled = false; $('m_send').textContent = 'Send message';
+  try { var saved = localStorage.getItem('tn_msg_discord'); if (saved && !$('m_discord').value) $('m_discord').value = saved; } catch (e) {}
+  $('mbg').style.display = 'flex';
+}
+$('m_agency').onchange = function () { $('m_agency_other').className = $('m_agency').value === '__other' ? '' : 'hide'; };
+$('mclose').onclick = function () { $('mbg').style.display = 'none'; };
+$('m_send').onclick = function () {
+  var btn = $('m_send'), agency = $('m_agency').value === '__other' ? $('m_agency_other').value : $('m_agency').value;
+  $('m_err').textContent = ''; btn.disabled = true; btn.textContent = 'Sending…';
+  api('message', { k: KEY }, { agency: agency, discord: $('m_discord').value, about: $('m_about').value, message: $('m_msg').value }).then(function () {
+    try { localStorage.setItem('tn_msg_discord', $('m_discord').value); } catch (e) {}
+    $('mbg').style.display = 'none'; toast('Message sent! We\'ll reply on Discord.');
+  }).catch(function (x) {
+    btn.disabled = false; btn.textContent = 'Send message'; $('m_err').textContent = errMsg(x);
+  });
+};
+
+$('refresh').onclick = load;
+$('discTop').onclick = function () { openMsg(null); };
+load();
+</script>
+</body>
+</html>
