@@ -177,7 +177,7 @@ function infoRow(s) {
   info.appendChild(cell('Creator', cr));
   var ty = el('div'); ty.appendChild(badge(s.vs, 'b-type')); ty.appendChild(el('div', '', s.type)); ty.lastChild.style.cssText = 'font-size:11px;color:var(--muted);margin-top:2px';
   info.appendChild(cell('Battle type', ty));
-  info.appendChild(cell('Est. diamonds', '◆ ' + s.diamond));
+  info.appendChild(cell('Est. diamonds', '◆ ' + s.diamond + (s.diamond2 ? ' + ' + s.diamond2 : '')));
   info.appendChild(cell('Est. score', s.score ? '★ ' + s.score : '-'));
   info.appendChild(cell('Power-ups', badge(s.powerups === 'PU' ? 'Power-ups' : 'No power-ups', s.powerups === 'PU' ? 'b-pu' : 'b-npu')));
   info.appendChild(cell('18+', badge(s.adult ? 'ON' : 'OFF', 'b-18')));
