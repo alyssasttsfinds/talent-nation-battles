@@ -162,6 +162,7 @@
     <div class="meta" id="dsub"></div>
     <textarea class="copy" id="dtext" readonly></textarea>
     <div class="actions">
+      <button class="btn" id="duser">Copy username</button>
       <button class="btn pri" id="dcopy">Copy message</button>
       <button class="btn" id="dclose">Done</button>
     </div>
@@ -440,6 +441,14 @@ function openConfirm(r) {
 }
 $('c_cancel').onclick = function () { $('mbg').style.display = 'none'; };
 $('dclose').onclick = function () { $('dbg').style.display = 'none'; };
+function copyText(s) {
+  var ta = document.createElement('textarea'); ta.value = s; document.body.appendChild(ta); ta.select();
+  var ok = false; try { ok = document.execCommand('copy'); } catch (e) {} document.body.removeChild(ta); return ok;
+}
+$('duser').onclick = function () {
+  var u = String($('duser').getAttribute('data-user') || '').replace(/^@/, '');
+  toast(copyText(u) ? 'Copied ' + u + ' - search it in Discord, then paste the message' : 'Username: ' + u);
+};
 $('dcopy').onclick = function () {
   var t = $('dtext'); t.select(); var ok = false; try { ok = document.execCommand('copy'); } catch (e) {}
   toast(ok ? 'Copied - paste it into your Discord DM' : 'Select the text and copy it');
@@ -451,6 +460,7 @@ $('c_save').onclick = function () {
     if (res && res.discordMessage) {
       $('dsub').textContent = 'Send this to ' + (res.discordContact || 'the partner') + ' on Discord' +
         (res.emailed === false ? ' (the email could not be sent)' : '') + ':';
+      $('duser').setAttribute('data-user', res.discordContact || '');
       $('dtext').value = res.discordMessage; $('dbg').style.display = 'flex';
     }
     toast(res && res.emailed ? 'Battle added to the sheet and confirmation emailed' : 'Battle added to the sheet'); load();
