@@ -84,13 +84,35 @@
   .row2 { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
   textarea.copy { width:100%; min-height:150px; }
   .toast { position:fixed; bottom:18px; left:50%; transform:translateX(-50%); background:#2b1760; color:#fff; padding:12px 18px; border-radius:99px; display:none; z-index:50; box-shadow:0 10px 30px rgba(30,15,71,.5); }
+  .viewtabs { display:flex; gap:14px; margin:0 0 22px; flex-wrap:wrap; }
+  .vt { flex:1; min-width:190px; text-align:center; padding:18px 24px; font-size:20px; font-weight:700; border-radius:99px; border:2px solid #cdbcf0; background:#fff; color:#5b4a82; cursor:pointer; }
+  .vt.on { background:linear-gradient(135deg,#f06bc2,#8b5cf6); color:#fff; border-color:transparent; box-shadow:0 8px 22px rgba(139,92,246,.4); }
+  .battlebar { display:flex; gap:10px; flex-wrap:wrap; margin:0 0 18px; }
+  .obhead { display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:12px; }
+  .obhead h2 { margin:0; font-size:18px; color:var(--plum); }
+  .obtools { display:flex; gap:8px; flex-wrap:wrap; } .obtools select, .obtools input { width:auto; min-width:170px; padding:9px 12px; }
+  .obtiles { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin:0 0 16px; }
+  .obtile { background:var(--card); border:1px solid var(--line); border-radius:18px; padding:14px 16px; }
+  .obtile b { display:block; font-size:30px; color:var(--plum); line-height:1.1; } .obtile span { font-size:12px; color:var(--muted); }
+  .obc { margin-bottom:16px; }
+  .obwrap { overflow-x:auto; margin-top:8px; }
+  .obwrap table { width:100%; border-collapse:collapse; font-size:13px; }
+  .obwrap th { text-align:left; background:var(--deep); color:#fff; padding:9px 10px; white-space:nowrap; }
+  .obwrap td { padding:10px; border-bottom:1px solid var(--line); vertical-align:top; color:var(--text); }
+  .obwrap .sub { color:var(--muted); font-size:12px; }
+  .obpill { display:inline-block; padding:2px 10px; border-radius:99px; font-size:11px; font-weight:700; color:#2a1f3d; white-space:nowrap; }
+  .obpill.Submitted { background:#fbe3a0; } .obpill.Applied { background:#b7d9f2; } .obpill.Joined { background:#dcc7f0; } .obpill.Host { background:#cfe8b5; }
+  .okt { color:#2e9b6a; font-weight:700; } .badt { color:#c0392b; font-weight:700; }
+  .obmono { font-family:Consolas,monospace; font-size:12px; word-break:break-all; }
+  .obmsg { grid-column:1/-1; }
+  .obrow { display:flex; justify-content:space-between; gap:10px; padding:5px 0; flex-wrap:wrap; }
   .hide { display:none !important; }
   @media (min-width:760px){ .strip{height:180px} .strip h1{font-size:38px} .wrap{padding:22px 24px 50px} }
 </style>
 </head>
 <body>
 <div id="login">
-  <div class="strip"><div class="sky" aria-hidden="true"><i class='s' style='left:84.6%;top:49.1%;--z:2px;--d:2.2s;--t:4.1s'></i><i class='s' style='left:65.8%;top:3.3%;--z:2px;--d:3.6s;--t:4.5s'></i><i class='s' style='left:12.7%;top:15.3%;--z:2px;--d:3.3s;--t:3.3s'></i><i class='s' style='left:58.9%;top:37%;--z:2.2px;--d:1.9s;--t:3.2s'></i><i class='s' style='left:67.8%;top:13%;--z:3.3px;--d:3.6s;--t:3.4s'></i><i class='s' style='left:76.6%;top:19.3%;--z:1.9px;--d:2.4s;--t:3.9s'></i><i class='s' style='left:8%;top:35.9%;--z:3.3px;--d:2.3s;--t:3.9s'></i><i class='s' style='left:47.3%;top:1.6%;--z:2.6px;--d:0.4s;--t:4.7s'></i><i class='s' style='left:87.6%;top:3.8%;--z:2.8px;--d:1s;--t:4.5s'></i><i class='s' style='left:40.2%;top:49.9%;--z:3.1px;--d:3.6s;--t:3.8s'></i><i class='s' style='left:12.8%;top:23.5%;--z:2.1px;--d:2.3s;--t:3.8s'></i><i class='s' style='left:53.9%;top:22.8%;--z:2.5px;--d:3.5s;--t:3s'></i><i class='s' style='left:63.8%;top:33.3%;--z:1.8px;--d:2.3s;--t:3.3s'></i><i class='s' style='left:72.4%;top:32.8%;--z:2.1px;--d:1.7s;--t:3.3s'></i><i class='s' style='left:83.8%;top:30.7%;--z:3.5px;--d:2.2s;--t:4.3s'></i><i class='s' style='left:87.2%;top:40.2%;--z:2px;--d:2.6s;--t:5s'></i><i class='s' style='left:34.6%;top:33.6%;--z:2.8px;--d:2.8s;--t:3.4s'></i><i class='s' style='left:85.8%;top:31.4%;--z:1.6px;--d:1.5s;--t:3.9s'></i><i class='s' style='left:18.7%;top:24.7%;--z:3.6px;--d:1s;--t:4.1s'></i><i class='s' style='left:7.7%;top:30.1%;--z:2.1px;--d:2s;--t:4.2s'></i><i class='s' style='left:68%;top:29.3%;--z:3.6px;--d:1.6s;--t:4.4s'></i><i class='s' style='left:66.6%;top:41%;--z:2.5px;--d:1.6s;--t:3.4s'></i><i class='s' style='left:0%;top:26.5%;--z:2.5px;--d:3.6s;--t:3.7s'></i><i class='s' style='left:38.9%;top:28.5%;--z:2.9px;--d:3s;--t:3.5s'></i><i class='s' style='left:39.3%;top:43.4%;--z:3.4px;--d:0.9s;--t:3s'></i><i class='s' style='left:19.8%;top:27%;--z:1.9px;--d:0.1s;--t:4.4s'></i><i class='s' style='left:6.9%;top:33.1%;--z:2.1px;--d:1.9s;--t:3.9s'></i><i class='s' style='left:45.1%;top:35.9%;--z:1.9px;--d:3.2s;--t:3.2s'></i><i class='s' style='left:75.6%;top:35.7%;--z:2.6px;--d:3.6s;--t:4s'></i><i class='s' style='left:80.1%;top:47.3%;--z:3.5px;--d:2.6s;--t:3.4s'></i><i class='s sp' style='left:12%;top:14%;--z:18px;--d:0s;--t:3.6s'></i><i class='s sp' style='left:30%;top:34%;--z:14px;--d:0.6s;--t:3.6s'></i><i class='s sp' style='left:55%;top:10%;--z:20px;--d:1.1s;--t:3.6s'></i><i class='s sp' style='left:72%;top:26%;--z:16px;--d:1.7s;--t:3.6s'></i><i class='s sp' style='left:88%;top:12%;--z:18px;--d:2.2s;--t:3.6s'></i><i class='s sp' style='left:44%;top:42%;--z:12px;--d:2.8s;--t:3.6s'></i><i class='s sp' style='left:95%;top:38%;--z:14px;--d:3.3s;--t:3.6s'></i></div><div class="ttl"><h1>Battle Dashboard</h1><small>Talent Nation</small></div></div>
+  <div class="strip"><div class="sky" aria-hidden="true"><i class='s' style='left:84.6%;top:49.1%;--z:2px;--d:2.2s;--t:4.1s'></i><i class='s' style='left:65.8%;top:3.3%;--z:2px;--d:3.6s;--t:4.5s'></i><i class='s' style='left:12.7%;top:15.3%;--z:2px;--d:3.3s;--t:3.3s'></i><i class='s' style='left:58.9%;top:37%;--z:2.2px;--d:1.9s;--t:3.2s'></i><i class='s' style='left:67.8%;top:13%;--z:3.3px;--d:3.6s;--t:3.4s'></i><i class='s' style='left:76.6%;top:19.3%;--z:1.9px;--d:2.4s;--t:3.9s'></i><i class='s' style='left:8%;top:35.9%;--z:3.3px;--d:2.3s;--t:3.9s'></i><i class='s' style='left:47.3%;top:1.6%;--z:2.6px;--d:0.4s;--t:4.7s'></i><i class='s' style='left:87.6%;top:3.8%;--z:2.8px;--d:1s;--t:4.5s'></i><i class='s' style='left:40.2%;top:49.9%;--z:3.1px;--d:3.6s;--t:3.8s'></i><i class='s' style='left:12.8%;top:23.5%;--z:2.1px;--d:2.3s;--t:3.8s'></i><i class='s' style='left:53.9%;top:22.8%;--z:2.5px;--d:3.5s;--t:3s'></i><i class='s' style='left:63.8%;top:33.3%;--z:1.8px;--d:2.3s;--t:3.3s'></i><i class='s' style='left:72.4%;top:32.8%;--z:2.1px;--d:1.7s;--t:3.3s'></i><i class='s' style='left:83.8%;top:30.7%;--z:3.5px;--d:2.2s;--t:4.3s'></i><i class='s' style='left:87.2%;top:40.2%;--z:2px;--d:2.6s;--t:5s'></i><i class='s' style='left:34.6%;top:33.6%;--z:2.8px;--d:2.8s;--t:3.4s'></i><i class='s' style='left:85.8%;top:31.4%;--z:1.6px;--d:1.5s;--t:3.9s'></i><i class='s' style='left:18.7%;top:24.7%;--z:3.6px;--d:1s;--t:4.1s'></i><i class='s' style='left:7.7%;top:30.1%;--z:2.1px;--d:2s;--t:4.2s'></i><i class='s' style='left:68%;top:29.3%;--z:3.6px;--d:1.6s;--t:4.4s'></i><i class='s' style='left:66.6%;top:41%;--z:2.5px;--d:1.6s;--t:3.4s'></i><i class='s' style='left:0%;top:26.5%;--z:2.5px;--d:3.6s;--t:3.7s'></i><i class='s' style='left:38.9%;top:28.5%;--z:2.9px;--d:3s;--t:3.5s'></i><i class='s' style='left:39.3%;top:43.4%;--z:3.4px;--d:0.9s;--t:3s'></i><i class='s' style='left:19.8%;top:27%;--z:1.9px;--d:0.1s;--t:4.4s'></i><i class='s' style='left:6.9%;top:33.1%;--z:2.1px;--d:1.9s;--t:3.9s'></i><i class='s' style='left:45.1%;top:35.9%;--z:1.9px;--d:3.2s;--t:3.2s'></i><i class='s' style='left:75.6%;top:35.7%;--z:2.6px;--d:3.6s;--t:4s'></i><i class='s' style='left:80.1%;top:47.3%;--z:3.5px;--d:2.6s;--t:3.4s'></i><i class='s sp' style='left:12%;top:14%;--z:18px;--d:0s;--t:3.6s'></i><i class='s sp' style='left:30%;top:34%;--z:14px;--d:0.6s;--t:3.6s'></i><i class='s sp' style='left:55%;top:10%;--z:20px;--d:1.1s;--t:3.6s'></i><i class='s sp' style='left:72%;top:26%;--z:16px;--d:1.7s;--t:3.6s'></i><i class='s sp' style='left:88%;top:12%;--z:18px;--d:2.2s;--t:3.6s'></i><i class='s sp' style='left:44%;top:42%;--z:12px;--d:2.8s;--t:3.6s'></i><i class='s sp' style='left:95%;top:38%;--z:14px;--d:3.3s;--t:3.6s'></i></div><div class="ttl"><h1>Admin Dashboard</h1><small>Talent Nation</small></div></div>
   <div class="login card">
     <h2 style="color:var(--plum);margin-top:4px">Welcome back</h2>
     <input id="pin" type="password" inputmode="numeric" placeholder="Enter your PIN" autocomplete="off">
@@ -100,14 +122,38 @@
 </div>
 
 <div id="app" class="hide">
-  <div class="strip"><div class="sky" aria-hidden="true"><i class='s' style='left:84.6%;top:49.1%;--z:2px;--d:2.2s;--t:4.1s'></i><i class='s' style='left:65.8%;top:3.3%;--z:2px;--d:3.6s;--t:4.5s'></i><i class='s' style='left:12.7%;top:15.3%;--z:2px;--d:3.3s;--t:3.3s'></i><i class='s' style='left:58.9%;top:37%;--z:2.2px;--d:1.9s;--t:3.2s'></i><i class='s' style='left:67.8%;top:13%;--z:3.3px;--d:3.6s;--t:3.4s'></i><i class='s' style='left:76.6%;top:19.3%;--z:1.9px;--d:2.4s;--t:3.9s'></i><i class='s' style='left:8%;top:35.9%;--z:3.3px;--d:2.3s;--t:3.9s'></i><i class='s' style='left:47.3%;top:1.6%;--z:2.6px;--d:0.4s;--t:4.7s'></i><i class='s' style='left:87.6%;top:3.8%;--z:2.8px;--d:1s;--t:4.5s'></i><i class='s' style='left:40.2%;top:49.9%;--z:3.1px;--d:3.6s;--t:3.8s'></i><i class='s' style='left:12.8%;top:23.5%;--z:2.1px;--d:2.3s;--t:3.8s'></i><i class='s' style='left:53.9%;top:22.8%;--z:2.5px;--d:3.5s;--t:3s'></i><i class='s' style='left:63.8%;top:33.3%;--z:1.8px;--d:2.3s;--t:3.3s'></i><i class='s' style='left:72.4%;top:32.8%;--z:2.1px;--d:1.7s;--t:3.3s'></i><i class='s' style='left:83.8%;top:30.7%;--z:3.5px;--d:2.2s;--t:4.3s'></i><i class='s' style='left:87.2%;top:40.2%;--z:2px;--d:2.6s;--t:5s'></i><i class='s' style='left:34.6%;top:33.6%;--z:2.8px;--d:2.8s;--t:3.4s'></i><i class='s' style='left:85.8%;top:31.4%;--z:1.6px;--d:1.5s;--t:3.9s'></i><i class='s' style='left:18.7%;top:24.7%;--z:3.6px;--d:1s;--t:4.1s'></i><i class='s' style='left:7.7%;top:30.1%;--z:2.1px;--d:2s;--t:4.2s'></i><i class='s' style='left:68%;top:29.3%;--z:3.6px;--d:1.6s;--t:4.4s'></i><i class='s' style='left:66.6%;top:41%;--z:2.5px;--d:1.6s;--t:3.4s'></i><i class='s' style='left:0%;top:26.5%;--z:2.5px;--d:3.6s;--t:3.7s'></i><i class='s' style='left:38.9%;top:28.5%;--z:2.9px;--d:3s;--t:3.5s'></i><i class='s' style='left:39.3%;top:43.4%;--z:3.4px;--d:0.9s;--t:3s'></i><i class='s' style='left:19.8%;top:27%;--z:1.9px;--d:0.1s;--t:4.4s'></i><i class='s' style='left:6.9%;top:33.1%;--z:2.1px;--d:1.9s;--t:3.9s'></i><i class='s' style='left:45.1%;top:35.9%;--z:1.9px;--d:3.2s;--t:3.2s'></i><i class='s' style='left:75.6%;top:35.7%;--z:2.6px;--d:3.6s;--t:4s'></i><i class='s' style='left:80.1%;top:47.3%;--z:3.5px;--d:2.6s;--t:3.4s'></i><i class='s sp' style='left:12%;top:14%;--z:18px;--d:0s;--t:3.6s'></i><i class='s sp' style='left:30%;top:34%;--z:14px;--d:0.6s;--t:3.6s'></i><i class='s sp' style='left:55%;top:10%;--z:20px;--d:1.1s;--t:3.6s'></i><i class='s sp' style='left:72%;top:26%;--z:16px;--d:1.7s;--t:3.6s'></i><i class='s sp' style='left:88%;top:12%;--z:18px;--d:2.2s;--t:3.6s'></i><i class='s sp' style='left:44%;top:42%;--z:12px;--d:2.8s;--t:3.6s'></i><i class='s sp' style='left:95%;top:38%;--z:14px;--d:3.3s;--t:3.6s'></i></div><div class="ttl"><h1>Battle Dashboard</h1><small id="who"></small></div></div>
+  <div class="strip"><div class="sky" aria-hidden="true"><i class='s' style='left:84.6%;top:49.1%;--z:2px;--d:2.2s;--t:4.1s'></i><i class='s' style='left:65.8%;top:3.3%;--z:2px;--d:3.6s;--t:4.5s'></i><i class='s' style='left:12.7%;top:15.3%;--z:2px;--d:3.3s;--t:3.3s'></i><i class='s' style='left:58.9%;top:37%;--z:2.2px;--d:1.9s;--t:3.2s'></i><i class='s' style='left:67.8%;top:13%;--z:3.3px;--d:3.6s;--t:3.4s'></i><i class='s' style='left:76.6%;top:19.3%;--z:1.9px;--d:2.4s;--t:3.9s'></i><i class='s' style='left:8%;top:35.9%;--z:3.3px;--d:2.3s;--t:3.9s'></i><i class='s' style='left:47.3%;top:1.6%;--z:2.6px;--d:0.4s;--t:4.7s'></i><i class='s' style='left:87.6%;top:3.8%;--z:2.8px;--d:1s;--t:4.5s'></i><i class='s' style='left:40.2%;top:49.9%;--z:3.1px;--d:3.6s;--t:3.8s'></i><i class='s' style='left:12.8%;top:23.5%;--z:2.1px;--d:2.3s;--t:3.8s'></i><i class='s' style='left:53.9%;top:22.8%;--z:2.5px;--d:3.5s;--t:3s'></i><i class='s' style='left:63.8%;top:33.3%;--z:1.8px;--d:2.3s;--t:3.3s'></i><i class='s' style='left:72.4%;top:32.8%;--z:2.1px;--d:1.7s;--t:3.3s'></i><i class='s' style='left:83.8%;top:30.7%;--z:3.5px;--d:2.2s;--t:4.3s'></i><i class='s' style='left:87.2%;top:40.2%;--z:2px;--d:2.6s;--t:5s'></i><i class='s' style='left:34.6%;top:33.6%;--z:2.8px;--d:2.8s;--t:3.4s'></i><i class='s' style='left:85.8%;top:31.4%;--z:1.6px;--d:1.5s;--t:3.9s'></i><i class='s' style='left:18.7%;top:24.7%;--z:3.6px;--d:1s;--t:4.1s'></i><i class='s' style='left:7.7%;top:30.1%;--z:2.1px;--d:2s;--t:4.2s'></i><i class='s' style='left:68%;top:29.3%;--z:3.6px;--d:1.6s;--t:4.4s'></i><i class='s' style='left:66.6%;top:41%;--z:2.5px;--d:1.6s;--t:3.4s'></i><i class='s' style='left:0%;top:26.5%;--z:2.5px;--d:3.6s;--t:3.7s'></i><i class='s' style='left:38.9%;top:28.5%;--z:2.9px;--d:3s;--t:3.5s'></i><i class='s' style='left:39.3%;top:43.4%;--z:3.4px;--d:0.9s;--t:3s'></i><i class='s' style='left:19.8%;top:27%;--z:1.9px;--d:0.1s;--t:4.4s'></i><i class='s' style='left:6.9%;top:33.1%;--z:2.1px;--d:1.9s;--t:3.9s'></i><i class='s' style='left:45.1%;top:35.9%;--z:1.9px;--d:3.2s;--t:3.2s'></i><i class='s' style='left:75.6%;top:35.7%;--z:2.6px;--d:3.6s;--t:4s'></i><i class='s' style='left:80.1%;top:47.3%;--z:3.5px;--d:2.6s;--t:3.4s'></i><i class='s sp' style='left:12%;top:14%;--z:18px;--d:0s;--t:3.6s'></i><i class='s sp' style='left:30%;top:34%;--z:14px;--d:0.6s;--t:3.6s'></i><i class='s sp' style='left:55%;top:10%;--z:20px;--d:1.1s;--t:3.6s'></i><i class='s sp' style='left:72%;top:26%;--z:16px;--d:1.7s;--t:3.6s'></i><i class='s sp' style='left:88%;top:12%;--z:18px;--d:2.2s;--t:3.6s'></i><i class='s sp' style='left:44%;top:42%;--z:12px;--d:2.8s;--t:3.6s'></i><i class='s sp' style='left:95%;top:38%;--z:14px;--d:3.3s;--t:3.6s'></i></div><div class="ttl"><h1>Admin Dashboard</h1><small id="who"></small></div></div>
   <div class="wrap">
-  <div class="bar">
-    <button class="btn pri" id="sheetlink">Open Google Sheet</button>
-    <button class="btn" id="boardlink">Copy board link</button>
-    <button class="btn" id="refresh">Refresh</button>
-    <button class="btn" id="logout">Lock</button>
+    <div class="viewtabs" id="viewtabs">
+    <div class="vt on" id="vt_onboard">Creator Onboarding</div>
+    <div class="vt" id="vt_battles">Battles</div>
   </div>
+  <div id="v_onboard" class="hide">
+    <div class="obhead"><h2>Onboarding &amp; welcome email tracking</h2><div class="obtools"><button class="btn" id="ob_refresh">Refresh</button><button class="btn pri" id="ob_health">Run health check</button></div></div>
+    <div class="card obc hide" id="ob_healthcard"><div id="ob_healthbody"></div></div>
+    <div class="obtiles" id="ob_tiles"></div>
+    <div class="card obc"><b>By agent</b><div class="obwrap"><table id="ob_byagent"></table></div></div>
+    <div class="card obc">
+      <div class="obhead"><b>Creators</b>
+        <div class="obtools">
+          <select id="ob_f">
+            <option value="all">All creators</option>
+            <option value="sent">Welcome email sent</option>
+            <option value="noclick">Emailed, hasn't clicked Discord yet</option>
+            <option value="clicked">Clicked the Discord link</option>
+            <option value="failed">Joined but email not sent / failed</option>
+            <option value="waiting">Waiting to join the agency</option>
+          </select>
+          <input id="ob_q" placeholder="Search name, TikTok, email...">
+        </div>
+      </div>
+      <div class="obwrap"><table id="ob_creators"></table></div>
+    </div>
+    <div class="card obc"><b>Signup links to share</b><div id="ob_links"></div></div>
+    <div class="card obc"><b>Recent activity</b><div class="obwrap"><table id="ob_log"></table></div></div>
+  </div>
+  <div id="v_battles">
+  <div class="battlebar" id="battlebar"><button class="btn pri" id="sheetlink">Open Google Sheet</button> <button class="btn" id="boardlink">Copy board link</button> <button class="btn" id="refresh">Refresh</button> <button class="btn" id="logout">Lock</button></div>
 <div class="grid">
     <section class="card">
       <div class="cal-head">
@@ -128,6 +174,7 @@
       <div class="tabs" id="tabs"></div>
       <div id="list"></div>
     </section>
+  </div>
   </div>
   </div>
 </div>
@@ -190,7 +237,12 @@ var google = { script: { run: (function () {
     postToBoard: function (pin, id) { return api('post', { pin: pin, id: id }); },
     removeFromBoard: function (pin, id) { return api('remove', { pin: pin, id: id }); },
     declinePartner: function (pin, id) { return api('decline', { pin: pin, id: id }); },
-    confirmBattle: function (pin, id, d) { return api('confirm', { pin: pin, id: id }, d); }
+    confirmBattle: function (pin, id, d) { return api('confirm', { pin: pin, id: id }, d); },
+    getOnboardingDashboard: function (pin) { return api('ob', { pin: pin }); },
+    markJoined: function (pin, id) { return api('objoined', { pin: pin, id: id }); },
+    resendWelcome: function (pin, id) { return api('obresend', { pin: pin, id: id }); },
+    markOriented: function (pin, id, discord) { return api('oboriented', { pin: pin, id: id }, { discord: discord || '' }); },
+    healthCheck: function (pin) { return api('obhealth', { pin: pin }); }
   };
   function make(ok, fail) {
     var r = {
@@ -224,6 +276,131 @@ function to24(t) {
 function toast(msg) { var t = $('toast'); t.textContent = msg; t.style.display = 'block'; setTimeout(function () { t.style.display = 'none'; }, 2600); }
 function errMsg(x) { return (x && x.message || 'Something went wrong').replace(/^Error:\s*/, ''); }
 
+// ---- creator onboarding (admin view)
+var OB = null, curView = 'onboard';
+function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+function pct(a, b) { return b ? Math.round(a / b * 100) + '%' : '-'; }
+function showView(v, noLoad) {
+  curView = v;
+  try { sessionStorage.setItem('tn_view', v); } catch (e) {}
+  $('v_battles').classList.toggle('hide', v !== 'battles');
+  $('v_onboard').classList.toggle('hide', v !== 'onboard');
+  $('vt_battles').classList.toggle('on', v === 'battles');
+  $('vt_onboard').classList.toggle('on', v === 'onboard');
+  if (v === 'onboard' && !noLoad) loadOb();
+}
+$('vt_battles').onclick = function () { showView('battles'); };
+$('vt_onboard').onclick = function () { showView('onboard'); };
+function loadOb() {
+  google.script.run.withSuccessHandler(function (d) { OB = d; renderOb(); })
+    .withFailureHandler(function (x) {
+      $('ob_tiles').innerHTML = '<div class="card obmsg">Onboarding data unavailable: ' + esc(errMsg(x)) + '</div>';
+    }).getOnboardingDashboard(PIN);
+}
+function obStats(list) {
+  var s = { sub: list.length, tk: 0, joined: 0, sent: 0, dc: 0, host: 0 };
+  list.forEach(function (c) {
+    if (c.clicks > 0) s.tk++;
+    if (c.status === 'Joined Agency' || c.status === 'Host') s.joined++;
+    if (c.emailStatus === 'Sent') s.sent++;
+    if (c.dcClicks > 0) s.dc++;
+    if (c.status === 'Host') s.host++;
+  });
+  return s;
+}
+function renderOb() {
+  var s = obStats(OB.creators);
+  $('ob_tiles').innerHTML = [
+    ['Submitted', s.sub, 'signed up via a form'],
+    ['Joined agency', s.joined, pct(s.joined, s.sub) + ' of submitted'],
+    ['Welcome email sent', s.sent, pct(s.sent, s.joined) + ' of joined'],
+    ['Clicked Discord link', s.dc, pct(s.dc, s.sent) + ' of emailed'],
+    ['Host (oriented)', s.host, pct(s.host, s.joined) + ' of joined']
+  ].map(function (t) { return '<div class="obtile"><span>' + t[0] + '</span><b>' + t[1] + '</b><span>' + t[2] + '</span></div>'; }).join('');
+
+  var h = '<tr><th>Agent</th><th>Submitted</th><th>Joined</th><th>Email sent</th><th>Clicked Discord</th><th>Host</th></tr>';
+  OB.agents.forEach(function (a) {
+    var x = obStats(OB.creators.filter(function (c) { return c.agent === a.name; }));
+    h += '<tr><td>' + esc(a.name) + '</td><td>' + x.sub + '</td><td>' + x.joined +
+      '</td><td>' + x.sent + '</td><td>' + x.dc + ' (' + pct(x.dc, x.sent) + ')</td><td>' + x.host + '</td></tr>';
+  });
+  $('ob_byagent').innerHTML = h;
+
+  $('ob_links').innerHTML = OB.agents.map(function (a) {
+    return '<div style="padding:6px 0"><b>' + esc(a.name) + '</b><div class="obmono">' + esc(a.short || (OB.baseUrl + '?agent=' + encodeURIComponent(a.slug))) + '</div></div>';
+  }).join('') || '<div class="empty">Add agents in the Agents tab of the onboarding sheet.</div>';
+
+  $('ob_log').innerHTML = '<tr><th>Time</th><th>Event</th><th>Detail</th></tr>' + OB.log.map(function (l) {
+    return '<tr><td>' + esc(l.time) + '</td><td class="' + (l.event === 'error' ? 'badt' : '') + '">' + esc(l.event) + '</td><td>' + esc(l.detail) + '</td></tr>';
+  }).join('');
+  renderObCreators();
+}
+function obJoined(c) { return c.status === 'Joined Agency' || c.status === 'Host'; }
+function renderObCreators() {
+  if (!OB) return;
+  var q = $('ob_q').value.toLowerCase(), f = $('ob_f').value;
+  var rows = OB.creators.filter(function (c) {
+    if (q && (c.name + c.tiktok + c.email + c.agent).toLowerCase().indexOf(q) < 0) return false;
+    if (f === 'sent') return c.emailStatus === 'Sent';
+    if (f === 'noclick') return c.emailStatus === 'Sent' && !c.dcClicks;
+    if (f === 'clicked') return c.dcClicks > 0;
+    if (f === 'failed') return obJoined(c) && c.emailStatus !== 'Sent';
+    if (f === 'waiting') return !obJoined(c);
+    return true;
+  });
+  var t = $('ob_creators');
+  t.innerHTML = '<tr><th>Creator</th><th>Agent</th><th>Status</th><th>Welcome email</th><th>Discord link</th><th></th></tr>';
+  rows.forEach(function (c) {
+    var tr = document.createElement('tr');
+    var cls = c.status === 'Joined Agency' ? 'Joined' : c.status;
+    var mail = c.emailStatus === 'Sent' ? '<span class="okt">&#10003; Sent</span><div class="sub">' + esc(c.emailSent) + '</div>'
+      : /^Failed/.test(c.emailStatus) ? '<span class="badt">Failed</span><div class="sub">' + esc(c.emailStatus) + '</div>'
+      : obJoined(c) ? '<span class="badt">Not sent</span>' : '<span class="sub">&mdash;</span>';
+    var dc = c.dcClicks > 0 ? '<span class="okt">&#10003; Clicked</span><div class="sub">' + esc(c.dcClicked) + (c.dcClicks > 1 ? ' &middot; ' + c.dcClicks + ' clicks' : '') + '</div>'
+      : c.emailStatus === 'Sent' ? '<span class="sub">Not yet</span>' : '<span class="sub">&mdash;</span>';
+    tr.innerHTML = '<td><b>' + esc(c.name) + '</b><br>@' + esc(c.tiktok) + '<div class="sub">' + esc(c.email) + (c.discord ? '<br>Discord: ' + esc(c.discord) : '') + '</div></td>' +
+      '<td>' + esc(c.agent) + '</td>' +
+      '<td><span class="obpill ' + esc(cls) + '">' + esc(c.status) + '</span><div class="sub">' + esc(c.submitted) + '</div></td>' +
+      '<td>' + mail + '</td><td>' + dc + '</td><td class="obact"></td>';
+    var cell = tr.lastChild;
+    function btn(label, fn, primary, needsDiscord) {
+      var dn = null;
+      if (needsDiscord && !c.discord) {
+        dn = document.createElement('input'); dn.placeholder = 'Discord username'; dn.style.marginBottom = '6px'; dn.style.minWidth = '150px';
+        cell.appendChild(dn); cell.appendChild(document.createElement('br'));
+      }
+      var b = el('button', 'btn' + (primary ? ' pri' : ''), label); b.style.marginBottom = '6px'; b.style.padding = '8px 14px';
+      b.onclick = function () {
+        if (dn && !dn.value.trim()) { toast('Type their Discord username first'); dn.focus(); return; }
+        b.disabled = true;
+        var run = google.script.run.withSuccessHandler(function (r) {
+          toast(r && r.emailed === false ? 'Marked joined, but the email failed: ' + (r.error || 'see log') : 'Done'); loadOb();
+        }).withFailureHandler(function (x) { b.disabled = false; toast(errMsg(x)); });
+        if (dn) run[fn](PIN, c.id, dn.value); else run[fn](PIN, c.id);
+      };
+      cell.appendChild(b); cell.appendChild(document.createElement('br'));
+    }
+    if (!obJoined(c)) btn('Joined the agency - send welcome email', 'markJoined', true);
+    if (c.status === 'Joined Agency') btn('Mark oriented (give host)', 'markOriented', true, true);
+    if (obJoined(c)) btn(c.emailStatus === 'Sent' ? 'Resend email' : 'Send email', 'resendWelcome', false);
+    t.appendChild(tr);
+  });
+  if (!rows.length) t.innerHTML += '<tr><td colspan="6" class="empty">No creators match.</td></tr>';
+}
+$('ob_refresh').onclick = function () { toast('Refreshing...'); loadOb(); };
+$('ob_q').addEventListener('input', renderObCreators);
+$('ob_f').addEventListener('change', renderObCreators);
+$('ob_health').onclick = function () {
+  var b = $('ob_health'); b.disabled = true;
+  $('ob_healthcard').classList.remove('hide'); $('ob_healthbody').textContent = 'Checking...';
+  google.script.run.withSuccessHandler(function (r) {
+    b.disabled = false;
+    $('ob_healthbody').innerHTML = r.map(function (x) {
+      return '<div class="obrow"><span>' + esc(x.name) + '</span><span class="' + (x.ok ? 'okt' : 'badt') + '">' + (x.ok ? 'OK' : 'FIX') + ' - ' + esc(x.detail) + '</span></div>';
+    }).join('');
+  }).withFailureHandler(function (x) { b.disabled = false; $('ob_healthbody').textContent = errMsg(x); }).healthCheck(PIN);
+};
+
 // ---- login
 function unlock(pin) {
   $('lbtn').disabled = true; $('lerr').textContent = '';
@@ -231,7 +408,7 @@ function unlock(pin) {
     PIN = pin; try { sessionStorage.setItem('tn_pin', pin); } catch (e) {}
     $('who').textContent = '· ' + u.name;
     $('login').classList.add('hide'); $('app').classList.remove('hide');
-    load();
+    load(); loadOb(); try { showView(sessionStorage.getItem('tn_view') || 'onboard', true); } catch (e) {}
   }).withFailureHandler(function (x) {
     $('lbtn').disabled = false; $('lerr').textContent = errMsg(x);
     try { sessionStorage.removeItem('tn_pin'); } catch (e) {}
@@ -240,7 +417,7 @@ function unlock(pin) {
 $('lbtn').onclick = function () { unlock($('pin').value); };
 $('pin').addEventListener('keydown', function (e) { if (e.key === 'Enter') unlock($('pin').value); });
 $('logout').onclick = function () { try { sessionStorage.removeItem('tn_pin'); } catch (e) {} location.reload(); };
-$('refresh').onclick = load;
+$('refresh').onclick = function () { load(); loadOb(); };
 try { var saved = sessionStorage.getItem('tn_pin'); if (saved) unlock(saved); } catch (e) {}
 
 // ---- data
@@ -250,7 +427,8 @@ function load() {
 }
 function render() { renderCal(); renderList(); }
 $('sheetlink').onclick = function () {
-  if (DATA && DATA.sheetUrl) window.open(DATA.sheetUrl, '_blank');
+  var d = curView === 'onboard' ? OB : DATA;
+  if (d && d.sheetUrl) window.open(d.sheetUrl, '_blank');
   else toast('Still loading - try again in a second');
 };
 
